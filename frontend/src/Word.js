@@ -5,7 +5,7 @@ import { apiBaseURL } from './constants';
 
 function Word(props) {
 
-  const [word, setWord] = useState("");
+  const [word, setWord] = useState(props.data['fields'].word);
 
   return (
     <>
@@ -24,6 +24,7 @@ function Word(props) {
             axiosInstance.put(`/word/updateWord/${props.data.pk}/`, {word: word})
             .then(res => {
               props.setData(res.data);
+              setWord('');
             });
       }}>
         Update
