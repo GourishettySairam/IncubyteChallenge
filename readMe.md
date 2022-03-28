@@ -6,7 +6,9 @@
 
 # Frontend is created using React
 
-> To run frontend, navigate to backend folder and run command ```yarn start```
+> To run frontend, navigate to backend folder and run command ```yarn install``` and then ```yarn start```
+
+> Navigate to localhost:3000/ to view the web page
  
 
 
