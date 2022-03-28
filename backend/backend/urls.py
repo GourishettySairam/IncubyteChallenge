@@ -19,8 +19,9 @@ from wordcrud.views import greeting
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
+from wordcrud import urls as wordcrud_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^$', greeting)
+    url(r'^word/', include(wordcrud_urls))
 ]

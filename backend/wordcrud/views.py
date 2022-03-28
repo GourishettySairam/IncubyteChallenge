@@ -7,3 +7,6 @@ from django.http.response import HttpResponse
 
 def greeting(request):
     return HttpResponse('Hi Sairam')
+
+def wordList(request):
+    return HttpResponse('returning a list of words')
