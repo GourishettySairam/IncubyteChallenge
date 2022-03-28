@@ -9,11 +9,14 @@ import json
 
 # Create your views here.
 
+def returnWords():
+    tmpJson = serializers.serialize("json", Words.objects.all())
+    tmpObj = json.loads(tmpJson)
+    return HttpResponse(json.dumps(tmpObj))
+
 def wordList(request):
     if request.method == 'GET':
-        tmpJson = serializers.serialize("json", Words.objects.all())
-        tmpObj = json.loads(tmpJson)
-        return HttpResponse(json.dumps(tmpObj))
+        return returnWords()
     return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def updateWord(request, pk):
@@ -27,9 +30,7 @@ def updateWord(request, pk):
         content = body['word']
         temp.word = content
         temp.save()
-        tmpJson = serializers.serialize("json", Words.objects.all())
-        tmpObj = json.loads(tmpJson)
-        return HttpResponse(json.dumps(tmpObj))
+        return returnWords()
     return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def createWord(request):
@@ -39,16 +40,12 @@ def createWord(request):
         content = body['word']
 
         Words.objects.create(word=content)
-        tmpJson = serializers.serialize("json", Words.objects.all())
-        tmpObj = json.loads(tmpJson)
-        return HttpResponse(json.dumps(tmpObj))
+        return returnWords()
     return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def deleteWord(request, pk):
     if(request.method == "DELETE"):
         temp = get_object_or_404(Words, pk=pk)
         temp.delete()
-        tmpJson = serializers.serialize("json", Words.objects.all())
-        tmpObj = json.loads(tmpJson)
-        return HttpResponse(json.dumps(tmpObj))
+        return returnWords()
     return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
