@@ -1,5 +1,5 @@
 from http.client import HTTPResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from django.http.response import HttpResponse
 from .models import Words
@@ -15,15 +15,18 @@ def greeting(request):
 def wordList(request):
     if request.method == 'GET':
         print('get request received')
-    tmpJson = serializers.serialize("json", Words.objects.all())
-    tmpObj = json.loads(tmpJson)
-    return HttpResponse(json.dumps(tmpObj))
+        tmpJson = serializers.serialize("json", Words.objects.all())
+        tmpObj = json.loads(tmpJson)
+        return HttpResponse(json.dumps(tmpObj))
+    return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def updateWord(request, pk):
     if(request.method == "PUT"):
-        print(Words.objects.get(pk=pk))
-        temp = Words.objects.get(pk=pk)
-
+        # print(Words.objects.get(pk=pk))
+        try:
+            temp = get_object_or_404(Words, pk=pk)
+        except:
+            return HttpResponse(status=404)
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         content = body['word']
@@ -33,9 +36,20 @@ def updateWord(request, pk):
         tmpJson = serializers.serialize("json", Words.objects.all())
         tmpObj = json.loads(tmpJson)
         return HttpResponse(json.dumps(tmpObj))
+    return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def createWord(request):
-    return HttpResponse('word created')
+    if(request.method == "POST"):
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        content = body['word']
+
+        Words.objects.create(word=content)
+        tmpJson = serializers.serialize("json", Words.objects.all())
+        tmpObj = json.loads(tmpJson)
+        return HttpResponse(json.dumps(tmpObj))
+        # return HttpResponse('word created')
+    return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def deleteWord(request, pk):
     return HttpResponse('word deleted')
