@@ -52,4 +52,12 @@ def createWord(request):
     return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def deleteWord(request, pk):
-    return HttpResponse('word deleted')
+    if(request.method == "DELETE"):
+        temp = get_object_or_404(Words, pk=pk)
+        temp.delete()
+        # temp.save()
+        print(Words.objects.all())
+        tmpJson = serializers.serialize("json", Words.objects.all())
+        tmpObj = json.loads(tmpJson)
+        return HttpResponse(json.dumps(tmpObj))
+    return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
