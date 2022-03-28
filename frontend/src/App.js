@@ -2,7 +2,7 @@ import './App.css';
 import { React, useEffect, useRef, useState } from 'react';
 import axios from 'axios' ;
 import Word from './Word';
-// import {fetch} from 'node-fetch';
+import { apiBaseURL } from './constants';
 
 function App() {
   const [data, setData] = useState([]);
@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     const axiosInstance = axios.create({
-      baseURL: 'http://127.0.0.1:8000/'
+      baseURL: apiBaseURL
     });
 
     console.log(axiosInstance.defaults);
@@ -34,7 +34,7 @@ function App() {
         }}/> &nbsp;
         <button onClick={() => {
             const axiosInstance = axios.create({
-              baseURL: 'http://127.0.0.1:8000/',
+              baseURL: apiBaseURL,
             });
         
             axiosInstance.post(`/word/createWord/`, {word: newWord} )

@@ -1,6 +1,7 @@
 import './App.css';
 import { React, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { apiBaseURL } from './constants';
 
 function Word(props) {
 
@@ -17,7 +18,7 @@ function Word(props) {
       }/> &nbsp;
       <button onClick={() => {
             const axiosInstance = axios.create({
-              baseURL: 'http://127.0.0.1:8000/',
+              baseURL: apiBaseURL,
             });
         
             axiosInstance.put(`/word/updateWord/${props.data.pk}/`, {word: word})
@@ -29,7 +30,7 @@ function Word(props) {
       </button>&nbsp;
       <button onClick={() => {
             const axiosInstance = axios.create({
-              baseURL: 'http://127.0.0.1:8000/',
+              baseURL: apiBaseURL,
             });
         
             axiosInstance.delete(`/word/deleteWord/${props.data.pk}/`)
