@@ -9,12 +9,8 @@ import json
 
 # Create your views here.
 
-def greeting(request):
-    return HttpResponse('Hi Sairam')
-
 def wordList(request):
     if request.method == 'GET':
-        print('get request received')
         tmpJson = serializers.serialize("json", Words.objects.all())
         tmpObj = json.loads(tmpJson)
         return HttpResponse(json.dumps(tmpObj))
@@ -22,15 +18,13 @@ def wordList(request):
 
 def updateWord(request, pk):
     if(request.method == "PUT"):
-        # print(Words.objects.get(pk=pk))
         try:
             temp = get_object_or_404(Words, pk=pk)
         except:
-            return HttpResponse(status=404)
+            return HttpResponse(json.dumps({'data': 'data not present'}), status=404)
         body_unicode = request.body.decode('utf-8')
         body = json.loads(body_unicode)
         content = body['word']
-        print(content)
         temp.word = content
         temp.save()
         tmpJson = serializers.serialize("json", Words.objects.all())
@@ -48,15 +42,12 @@ def createWord(request):
         tmpJson = serializers.serialize("json", Words.objects.all())
         tmpObj = json.loads(tmpJson)
         return HttpResponse(json.dumps(tmpObj))
-        # return HttpResponse('word created')
     return HttpResponse(json.dumps({'data': "invalid method"}), status=405)
 
 def deleteWord(request, pk):
     if(request.method == "DELETE"):
         temp = get_object_or_404(Words, pk=pk)
         temp.delete()
-        # temp.save()
-        print(Words.objects.all())
         tmpJson = serializers.serialize("json", Words.objects.all())
         tmpObj = json.loads(tmpJson)
         return HttpResponse(json.dumps(tmpObj))
